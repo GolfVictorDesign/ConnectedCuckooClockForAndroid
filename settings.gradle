@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven { url "https://www.jitpack.io" }
     }
 }
 dependencyResolutionManagement {
@@ -16,8 +17,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://www.jitpack.io" }
     }
 }
 
 rootProject.name = "ConnectedCuckooClockForAndroid"
 include ':app'
+include ':lib-blufi'
+project(':lib-blufi').projectDir = new File(rootDir, 'lib-blufi-android/lib-blufi/')

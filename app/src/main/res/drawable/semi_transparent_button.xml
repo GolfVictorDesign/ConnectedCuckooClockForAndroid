@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/semi_transparent_button.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Define a semi-transparent black background -->
+    <solid android:color="#10000000"/> <!-- #80000000 is a semi-transparent black -->
+    <!-- Define rounded corners -->
+    <corners android:radius="16dp"/>
+    <!-- Define padding for the button -->
+    <padding android:left="16dp" android:top="8dp" android:right="16dp" android:bottom="8dp"/>
+</shape>

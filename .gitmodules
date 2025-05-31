@@ -1,0 +1,3 @@
+[submodule "lib-blufi-android"]
+	path = lib-blufi-android
+	url = git@github.com:GolfVictorDesign/lib-blufi-android.git

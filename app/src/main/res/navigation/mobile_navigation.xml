@@ -12,14 +12,8 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.connectedcuckooclockforandroid.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.connectedcuckooclockforandroid.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_config"
+        android:name="com.connectedcuckooclockforandroid.ui.configuration.ConfigFragment"
+        android:label="@string/menu_config"
+        tools:layout="@layout/fragment_config" />
 </navigation>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/styles.xml -->
+<resources>
+    <style name="TransparentButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/semi_transparent_button</item>
+        <item name="android:textColor">#10000000</item>
+    </style>
+</resources>
