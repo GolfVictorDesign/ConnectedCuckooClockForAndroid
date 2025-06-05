@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.connectedcuckooclockforandroid'
+    namespace 'com.cuckooclock'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.connectedcuckooclockforandroid"
+        applicationId "com.cuckooclock"
         minSdk 28
         targetSdk 35
         versionCode 1
@@ -44,6 +44,10 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+    implementation libs.datastore.preferences
+    implementation libs.datastore.rxjava2
+    implementation libs.datastore.preferences.rxjava2
 
     implementation libs.photoview
     implementation libs.palette

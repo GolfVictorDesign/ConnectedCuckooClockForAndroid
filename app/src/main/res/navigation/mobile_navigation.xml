@@ -7,13 +7,20 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.connectedcuckooclockforandroid.ui.home.HomeFragment"
+        android:name="com.cuckooclock.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_config"
-        android:name="com.connectedcuckooclockforandroid.ui.configuration.ConfigFragment"
+        android:name="com.cuckooclock.ui.configuration.ConfigFragment"
         android:label="@string/menu_config"
-        tools:layout="@layout/fragment_config" />
+        tools:layout="@layout/fragment_config"/>
+
+    <fragment
+        android:id="@+id/nav_scan"
+        android:name="com.cuckooclock.ui.configuration.ConfigFragment"
+        android:label="Scan"
+        tools:layout="@layout/fragment_ble_scan"/>
+
 </navigation>
