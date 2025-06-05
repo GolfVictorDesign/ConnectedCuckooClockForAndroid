@@ -1,11 +1,9 @@
 package com.connectedcuckooclockforandroid;
 
-import android.os.Bundle;
-import android.view.View;
-import android.view.Menu;
-
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+
+import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,7 +17,7 @@ import com.connectedcuckooclockforandroid.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-            private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
