@@ -23,5 +23,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "ConnectedCuckooClockForAndroid"
 include ':app'
+
 include ':lib-blufi'
 project(':lib-blufi').projectDir = new File(rootDir, 'lib-blufi-android/lib-blufi/')

@@ -11,6 +11,12 @@
     <string name="menu_config">Configuration</string>
     <string name="cuckoo_front">cuckoo_front</string>
 
+    <string name="bluetooth_disabled">Bluetooth is not enabled, please activate bluetooth to scan for devices</string>
+
     <string name="confirm">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="unknown">Unknown</string>
+    
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

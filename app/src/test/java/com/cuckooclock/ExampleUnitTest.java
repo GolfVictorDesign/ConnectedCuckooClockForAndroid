@@ -1,4 +1,4 @@
-package com.connectedcuckooclockforandroid;
+package com.cuckooclock;
 
 import org.junit.Test;
 
