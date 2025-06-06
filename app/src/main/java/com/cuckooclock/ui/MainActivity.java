@@ -1,6 +1,7 @@
-package com.cuckooclock.app;
+package com.cuckooclock.ui;
 
 import com.cuckooclock.R;
+import com.cuckooclock.app.ApplicationSettings;
 import com.google.android.material.navigation.NavigationView;
 
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding mBinding;
+    private ApplicationSettings mApplicationSettings;
 
     public ApplicationSettings getApplicationSettings() {
         return mApplicationSettings;
@@ -27,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     public void setApplicationSettings(ApplicationSettings mApplicationSettings) {
         this.mApplicationSettings = mApplicationSettings;
     }
-
-    private ApplicationSettings mApplicationSettings;
 
 
     @Override

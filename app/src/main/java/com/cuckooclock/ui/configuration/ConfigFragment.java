@@ -1,41 +1,23 @@
 package com.cuckooclock.ui.configuration;
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.PreferencesKeys;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.cuckooclock.R;
 import com.cuckooclock.app.ApplicationSettings;
-import com.cuckooclock.app.MainActivity;
+import com.cuckooclock.ui.MainActivity;
 import com.cuckooclock.databinding.FragmentConfigBinding;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class ConfigFragment extends Fragment {
 
@@ -67,17 +49,7 @@ public class ConfigFragment extends Fragment {
         mbWifiConfigDone = mApplicationSettings.getValue(mPreferencesWifiConfigDoneKey, false);
 
         if (!mbWifiConfigDone) {
-            mbWifiConfigDone = true;
-            // Creation du nouveau fragment de Scan BLE
-//            BleScanFragment bleScanFragment =BleScanFragment.newInstance("toto", "tata");
-//
-//            NavController navController = NavHostFragment.findNavController(this);
-//            navController.navigate(R.id.action_nav_config_to_nav_scan);
-//
-//            getParentFragmentManager().beginTransaction()
-//                    .replace(R.id.frame_ble_scan, bleScanFragment)
-//                    .addToBackStack(null)
-//                    .commit();
+            assert true;
         }
 
         mFragmentConfigbinding = FragmentConfigBinding.inflate(inflater, container, false);
