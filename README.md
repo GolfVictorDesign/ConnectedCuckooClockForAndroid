@@ -1,1 +1,1 @@
-Android 9+ application for configuration and usage of [connected cuckoo clock](https://github.com/GolfVictorDesign/connected_cuckoo_clock/).
+Android 9+ application for configuration and usage of [Connected Cuckoo Clock](https://github.com/GolfVictorDesign/ConnectedCuckooClock/).

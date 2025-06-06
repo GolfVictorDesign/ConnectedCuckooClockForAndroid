@@ -1,6 +1,7 @@
 package com.cuckooclock.ui.configuration;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +16,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.cuckooclock.R;
 import com.cuckooclock.app.ApplicationSettings;
+import com.cuckooclock.app.BlufiConstants;
 import com.cuckooclock.ui.MainActivity;
 import com.cuckooclock.databinding.FragmentConfigBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ConfigFragment extends Fragment {
+
+    private static final int REQUEST_PERMISSION = 0x01;
+    private static final int REQUEST_BLUFI = 0x10;
+    private static final int MENU_SETTINGS = 0x01;
 
     private FragmentConfigBinding mFragmentConfigbinding;
     private Context mContext;
@@ -49,7 +55,8 @@ public class ConfigFragment extends Fragment {
         mbWifiConfigDone = mApplicationSettings.getValue(mPreferencesWifiConfigDoneKey, false);
 
         if (!mbWifiConfigDone) {
-            assert true;
+            Intent intent = new Intent(mContext, BleScanActivity.class);
+            startActivity(intent);
         }
 
         mFragmentConfigbinding = FragmentConfigBinding.inflate(inflater, container, false);

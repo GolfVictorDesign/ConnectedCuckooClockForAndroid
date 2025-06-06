@@ -1,48 +1,52 @@
 package com.cuckooclock.ui.configuration;
 
+import static android.view.View.VISIBLE;
+
 import android.Manifest;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.cuckooclock.R;
-import com.cuckooclock.databinding.FragmentBleScanBinding;
+import com.cuckooclock.databinding.ActivityBleScanBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BleScanFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BleScanFragment extends Fragment {
+public class BleScanActivity extends AppCompatActivity {
 
     private Context mContext;
-    private FragmentBleScanBinding mFragmentBleScanBinding;
+    private ActivityBleScanBinding mBleScanBinding;
 
     // Bluetooth scanning
     private static final int REQUEST_CODE_BLUETOOTH_PERMISSIONS = 100;
@@ -54,55 +58,66 @@ public class BleScanFragment extends Fragment {
     private BleAdapter mBleAdapter;
     private boolean mbPermissionGranted;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public BleScanFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BleScanFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BleScanFragment newInstance(String param1, String param2) {
-        BleScanFragment fragment = new BleScanFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
-        mContext = requireContext();
+        mContext = this;
+
+        // Tell the user he hasn't configured his cuckoo yet
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+        alertDialogBuilder.setMessage(R.string.cuckoo_not_yet_configured_msg);
+        alertDialogBuilder.setTitle(R.string.cuckoo_not_yet_configured_title);
+        // This is a mandatory step
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setNegativeButton(
+                "Go back...",
+                (DialogInterface.OnClickListener) (dialog, which) -> {
+                    finish();
+                }
+        );
+        alertDialogBuilder.setPositiveButton(
+                "Let's go, chap!",
+                (DialogInterface.OnClickListener) (dialog, which) -> {
+                    Toast bluetoothDiasbledToast = Toast.makeText(
+                            mContext,
+                            R.string.bluetooth_disabled,
+                            Toast.LENGTH_SHORT
+                    );
+
+                    while(!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+
+                        SystemClock.sleep(2000);
+
+                    }
+                }
+        );
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_ble_scan);
+
         mThreadPool = Executors.newSingleThreadExecutor();
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mFragmentBleScanBinding = FragmentBleScanBinding.inflate(inflater, container, false);
-        return inflater.inflate(R.layout.fragment_ble_scan, container, false);
+        mBleList = new LinkedList<>();
+        mBleAdapter = new BleAdapter();
+        // TODO mBleScanBinding.contentBleScanRef..setAdapter(mBleAdapter);
+
+        mDeviceMap = new HashMap<>();
+        mBleScanCallback = new ScanCallback();
+
+        mBleScanBinding = ActivityBleScanBinding.inflate(getLayoutInflater());
+        mBleScanBinding.contentBleScanRef.refreshBleDevicesLayout.setColorSchemeResources(R.color.purple_700);
+        mBleScanBinding.contentBleScanRef.refreshBleDevicesLayout.setOnRefreshListener(this::scanBleDevices);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        scanBleDevices();
     }
 
     private void onIntervalScanUpdate(boolean over) {
@@ -114,13 +129,13 @@ public class BleScanFragment extends Fragment {
             return rssi2.compareTo(rssi1);
         });
 
-        requireActivity().runOnUiThread( ()-> {
+        runOnUiThread( ()-> {
             mBleList.clear();
             mBleList.addAll(devices);
             mBleAdapter.notifyDataSetChanged();
 
             if (over) {
-                mFragmentBleScanBinding.refreshBleDevices.setRefreshing(false);
+                mBleScanBinding.contentBleScanRef.refreshBleDevicesLayout.setRefreshing(false);
             }
         });
     }
@@ -129,7 +144,7 @@ public class BleScanFragment extends Fragment {
         if ((ActivityCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_CONNECT) !=
                 PackageManager.PERMISSION_GRANTED) || !mbPermissionGranted) {
             // Allow the usage of bluetooth
-            ActivityCompat.requestPermissions(requireActivity(),
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE_BLUETOOTH_PERMISSIONS);
         }
@@ -157,7 +172,7 @@ public class BleScanFragment extends Fragment {
         }
     }
 
-    private void scanBlufiDevices() {
+    private void scanBleDevices() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
         if (!bluetoothAdapter.isEnabled() || scanner == null) {
@@ -170,6 +185,8 @@ public class BleScanFragment extends Fragment {
         mBleList.clear();
 
         if (checkBluetoothPermission()) {
+
+            mBleScanBinding.contentBleScanRef.devicesCardView.setVisibility(VISIBLE);
             // Start scanning BLE devices
             scanner.startScan(
                     null,
@@ -222,13 +239,13 @@ public class BleScanFragment extends Fragment {
 
     private class BleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ScanResult scanResult;
-        FragmentBleScanBinding mBinding;
+        ActivityBleScanBinding mBinding;
 
-        BleHolder(FragmentBleScanBinding binding) {
+        BleHolder(ActivityBleScanBinding binding) {
             super(binding.getRoot());
 
             this.mBinding = binding;
-            binding.refreshBleDevices.setOnClickListener(this);
+            binding.contentBleScanRef.refreshBleDevicesLayout.setOnClickListener(this);
         }
 
         @Override
@@ -244,7 +261,7 @@ public class BleScanFragment extends Fragment {
         @NonNull
         @Override
         public BleHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            FragmentBleScanBinding binding = FragmentBleScanBinding.inflate(getLayoutInflater(), parent, false);
+            ActivityBleScanBinding binding = ActivityBleScanBinding.inflate(getLayoutInflater(), parent, false);
             return new BleHolder(binding);
         }
 
@@ -257,15 +274,15 @@ public class BleScanFragment extends Fragment {
                 BluetoothDevice device = scanResult.getDevice();
 
                 String name = device.getName() == null ? getString(R.string.unknown) : device.getName();
-                holder.mBinding.textDeviceName.setText(name);
+                holder.mBinding.contentBleScanRef.textDeviceName.setText(name);
 
                 SpannableStringBuilder info = new SpannableStringBuilder();
                 info.append("Mac:").append(device.getAddress())
                         .append(" RSSI:").append(String.valueOf(scanResult.getRssi()));
                 info.setSpan(new ForegroundColorSpan(0xFF9E9E9E), 0, 21, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 info.setSpan(new ForegroundColorSpan(0xFF8D6E63), 21, info.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                holder.mBinding.textDeviceInfo.setText(info);
-                }
+                holder.mBinding.contentBleScanRef.textDeviceInfo.setText(info);
+            }
         }
 
         @Override
@@ -273,6 +290,5 @@ public class BleScanFragment extends Fragment {
             return mBleList.size();
         }
     }
-
 
 }

@@ -17,6 +17,7 @@ photoview = "2.3.0"
 legacySupportV4 = "1.0.0"
 datastoreRxjava2 = "1.1.7"
 datastorePreferencesRxjava2 = "1.1.7"
+activity = "1.8.0"
 
 [libraries]
 colorpickerview = { module = "com.github.skydoves:colorpickerview", version.ref = "colorpickerview" }
@@ -37,6 +38,7 @@ photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photovi
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 datastore-rxjava2 = { group = "androidx.datastore", name = "datastore-rxjava2", version.ref = "datastoreRxjava2" }
 datastore-preferences-rxjava2 = { group = "androidx.datastore", name = "datastore-preferences-rxjava2", version.ref = "datastorePreferencesRxjava2" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
