@@ -1,10 +1,7 @@
-package com.connectedcuckooclockforandroid.ui.configuration;
+package com.cuckooclock.ui.configuration;
 
-import android.app.Application;
-import android.content.Context;
 import android.graphics.Color;
 
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
